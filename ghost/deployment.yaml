@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost-blog
+  labels:
+    app: ghost-blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost-blog
+  template:
+    metadata:
+      labels:
+        app: ghost-blog
+    spec:
+      containers:
+        - name: ghost
+          image: 'ghost:3.42.5-alpine'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2368
+          env:
+            - name: url
+              value: 'http://life-with-cirrhos.is'
+      volumeMounts:
+        - name: content
+          mountPath: /var/lib/ghost/content
+          persistentVolumeClaim:
+            claimName: ghost-blog-content
