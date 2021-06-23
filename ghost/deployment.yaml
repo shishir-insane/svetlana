@@ -14,17 +14,19 @@ spec:
       labels:
         app: ghost-blog
     spec:
+      volumes:
+        - name: ghost-blog-volume-storage
+          persistentVolumeClaim:
+            claimName: ghost-blog-volume-claim
       containers:
         - name: ghost
-          image: 'ghost:3.42.5-alpine'
+          image: "ghost:3.42.5-alpine"
           imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/var/lib/ghost/content"
+              name: ghost-blog-volume-storage
           ports:
             - containerPort: 2368
           env:
             - name: url
-              value: 'http://life-with-cirrhos.is'
-      volumeMounts:
-        - name: content
-          mountPath: /var/lib/ghost/content
-          persistentVolumeClaim:
-            claimName: ghost-blog-content
+              value: "http://life-with-cirrhos.is"  
